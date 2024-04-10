@@ -1,0 +1,59 @@
+version: '3.9'
+services:
+  #Zookeeper Service.
+  zookeeper:
+    image: 'bitnami/zookeeper:latest'
+    restart: "always"
+    ports:
+      - '2181:2181'
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    container_name: zookeeper
+
+  #Kafka Service
+  kafka:
+    image: 'bitnami/kafka:latest'
+    restart: "always"
+    ports:
+      - '9092:9092'
+      - '29092:29092'
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=INTERNAL://:29092,EXTERNAL://:9092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=INTERNAL://kafka:29092,EXTERNAL://localhost:9092
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_INTER_BROKER_LISTENER_NAME=INTERNAL
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    container_name: kafka
+    depends_on:
+      - zookeeper
+  kafdrop:
+    image: obsidiandynamics/kafdrop
+    restart: "no"
+    ports:
+      - "9000:9000"
+    environment:
+      KAFKA_BROKERCONNECT: "kafka:29092"
+    depends_on:
+      - "kafka"
+  chrome:
+    image: selenium/standalone-chrome:110.0.5481.77-chromedriver-110.0.5481.77-grid-4.8.0-20230210
+    hostname: chrome
+    ports:
+      - "5900:5900"
+      - "4444:4444"
+    privileged: true
+    shm_size: 2g
+  pb-liga-dataloader:
+    image: pbliga_webscraper_image
+    build:
+      context: ./
+      target: production
+    depends_on:
+      - chrome
+      - kafka
+    ports:
+      - 8080:8080
+    volumes:
+      - C:/Users/Siarhei_Dubadzelau/Documents/Projects/PB-Projects/datastorage:/application/datastorage

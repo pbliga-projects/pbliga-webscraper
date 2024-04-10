@@ -1,0 +1,23 @@
+version: '3.9'
+services:
+  chrome:
+    image: selenium/standalone-chrome:110.0.5481.77-chromedriver-110.0.5481.77-grid-4.8.0-20230210
+    hostname: chrome
+    ports:
+      - "5900:5900"
+      - "4444:4444"
+    privileged: true
+    shm_size: 2g
+  pb-liga-dataloader:
+    image: pbliga_webscraper_image
+    build:
+      context: ./
+      target: development
+      dockerfile: Dockerfile_dev
+    depends_on:
+      - chrome
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+    volumes:
+      - C:/Users/Siarhei_Dubadzelau/Documents/Projects/PB-Projects:/application

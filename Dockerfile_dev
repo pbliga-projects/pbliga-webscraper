@@ -1,0 +1,17 @@
+FROM gradle:8-jdk8 as base
+
+RUN mkdir -p /application
+
+#RUN /usr/sbin/addgroup --system juser
+#RUN /usr/sbin/adduser -S -s /bin/false -G juser juser
+#RUN chown -R juser:juser /application
+#USER juser
+
+#WORKDIR /application
+#COPY . ./
+
+FROM base as development
+WORKDIR /application/pbliga-webscraper
+EXPOSE 5005
+CMD ["gradle", "bootRun", "-Pdebug"]
+
