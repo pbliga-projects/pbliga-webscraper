@@ -1,0 +1,62 @@
+version: 0.0.1-SNAPSHOT
+
+debug: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+    endpoint:
+      shutdown:
+        enabled: true
+      info:
+        enabled: true
+    enabled-by-default: true
+
+spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration
+  kafka:
+    bootstrap-servers: kafka:29092
+    consumer:
+      group-id: pbligawebscraper
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    listener:
+      missing-topics-fatal: false # Set to false to allow topic creation if missing
+    admin:
+      properties:
+        bootstrap.servers: kafka:29092
+
+logging:
+  level:
+    org:
+      apache:
+        kafka: warn
+
+data:
+  storage:
+    path: /application/datastorage
+  chromedriver:
+    path: drivers/chromedriver.exe
+
+remote:
+  web:
+    driver:
+      url: http://chrome:4444/wd/hub
+
+scrapped:
+  data:
+    kafka:
+      sending:
+        enabled: false
+
+messaging:
+  provider: kafka
+  topics:
+    scrapper-data: scrapper-data-topic
+    default: default-topic
