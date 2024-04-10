@@ -1,4 +1,4 @@
-name: Build Docker Image
+name: Build Docker Image and Upload Release Asset
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build:
+  build_and_upload:
     runs-on: ubuntu-latest
 
     steps:
@@ -15,4 +15,26 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t pbliga-webscraper:latest .
+          docker build -t sdubodelov/pbliga-webscraper:latest .
+          docker push sdubodelov/pbliga-webscraper:latest
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: pbliga-webscuper-v${{ github.run_number }}
+          release_name: pbliga-webscuper-v${{ github.run_number }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: Dockerfile  # Path to the Dockerfile
+          asset_name: pbliga-webscraper.tar.gz  # Name of the Docker image archive
