@@ -49,3 +49,4 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: Dockerfile  # Path to the Dockerfile
           asset_name: pbliga-webscraper.tar.gz  # Name of the Docker image archive
+          asset_content_type: application/x-gzip
