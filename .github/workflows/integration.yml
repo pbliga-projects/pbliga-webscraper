@@ -1,0 +1,21 @@
+name: Upload Release Asset
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  upload-release-asset:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./application/app.jar
+          asset_name: pbliga-webscraper-v${{ github.run_number }}
+          asset_content_type: application/java-archive
+          token: ${{ secrets.GITHUB_TOKEN }}
