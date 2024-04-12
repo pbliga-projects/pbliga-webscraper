@@ -13,6 +13,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11' # or whichever version you need
+
+      - name: Build project
+        run: ./gradlew build # or your build command
+
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -47,6 +55,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./Dockerfile  # Path to the Dockerfile
-          asset_name: pbliga-webscraper.tar.gz  # Name of the Docker image archive
-          asset_content_type: application/x-gzip
+          asset_path: build/libs/pbliga-webscraper.jar
+          asset_name: pbliga-webscraper.jar
