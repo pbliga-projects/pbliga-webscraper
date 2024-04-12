@@ -13,10 +13,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up JDK
-        uses: actions/setup-java@v2
-        with:
-          java-version: '11' # or whichever version you need
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
 
       - name: Build project
         run: ./gradlew build # or your build command
