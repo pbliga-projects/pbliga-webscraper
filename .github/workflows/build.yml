@@ -13,32 +13,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Print current folder
-        run: pwd
-
-      - name: List current folder
-        run: ls -al
-
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
-      - name: Print current folder
-        run: pwd
-
-      - name: List current folder
-        run: ls -al
-
       - name: Build project
         run: ./gradlew build # or your build command
-
-      - name: Print current folder
-        run: pwd
-
-      - name: List current folder
-        run: ls -al
 
       - name: Archive build artifacts
         uses: actions/upload-artifact@v2
@@ -68,9 +50,6 @@ jobs:
           name: java-artifacts
           path: build/libs
 
-      - name: List current folder
-        run: ls -al
-
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -81,9 +60,6 @@ jobs:
           release_name: pbliga-webscuper-v${{ github.run_number }}
           draft: false
           prerelease: false
-
-      - name: List current folder
-        run: ls -al
 
       - name: Upload Release Asset
         id: upload-release-asset
