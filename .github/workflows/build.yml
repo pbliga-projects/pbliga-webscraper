@@ -40,6 +40,12 @@ jobs:
       - name: List current folder
         run: ls -al
 
+      - name: Archive build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: java-artifacts
+          path: build/libs/*.jar
+
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -56,6 +62,15 @@ jobs:
     needs: build
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: java-artifacts
+          path: build/libs
+
       - name: List current folder
         run: ls -al
 
