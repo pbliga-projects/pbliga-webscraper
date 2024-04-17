@@ -16,17 +16,15 @@ import java.util.List;
 @Lazy
 public class DataPullingService {
 
-    private final PersistService persistService;
     private final ScrapingService scrapingService;
 
     private final Boolean kafkaSendingEnabled;
 
     private final MessagingService messagingService;
 
-    public DataPullingService(PersistService persistService, ScrapingService scrapingService,
+    public DataPullingService(ScrapingService scrapingService,
                               @Value("${scrapped.data.kafka.sending.enabled}") Boolean kafkaSendingEnabled,
                               MessagingService messagingService) {
-        this.persistService = persistService;
         this.scrapingService = scrapingService;
         this.kafkaSendingEnabled = kafkaSendingEnabled;
         this.messagingService = messagingService;
@@ -38,10 +36,9 @@ public class DataPullingService {
 
         if ( !CollectionUtils.isEmpty(dataElements)) {
             String jsonData = PbligaScraperDataConverter.convertHtmlToJson(dataElements);
-            persistService.save(jsonData);
-            //if (kafkaSendingEnabled) {
+            if (kafkaSendingEnabled) {
                 messagingService.sendMessage(jsonData);
-            //}
+            }
         }
         return dataElements.toString();
     }

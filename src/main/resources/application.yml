@@ -39,8 +39,6 @@ logging:
         kafka: warn
 
 data:
-  storage:
-    path: /application/datastorage
   chromedriver:
     path: drivers/chromedriver.exe
 
@@ -53,7 +51,7 @@ scrapped:
   data:
     kafka:
       sending:
-        enabled: false
+        enabled: true
 
 messaging:
   provider: kafka

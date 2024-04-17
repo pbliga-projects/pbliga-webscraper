@@ -2,7 +2,6 @@ package com.sdub.pbliga.pbligawebscraper.service;
 
 import com.sdub.pbliga.pbligawebscraper.BaseTest;
 import com.sdub.pbliga.pbligawebscraper.exception.LoaderException;
-import com.sdub.pbliga.pbligawebscraper.messaging.service.MessagingService;
 import com.sdub.pbliga.pbligawebscraper.model.datalake.DataLakeModel;
 import com.sdub.pbliga.pbligawebscraper.model.datalake.FreeClub;
 import com.sdub.pbliga.pbligawebscraper.processor.DataType;
@@ -29,12 +28,6 @@ public class DataPullingServiceTest extends BaseTest {
 
     @Mock
     private ScrapingService scrapingService;
-
-    @Mock
-    private MessagingService messagingService;
-
-    @Mock
-    private PersistService persistService;
 
     @BeforeEach
     public void setup() {
@@ -65,11 +58,8 @@ public class DataPullingServiceTest extends BaseTest {
 
         List<DataLakeModel> dataElements = getDataLakeModelsForTest();
 
-        //when(scrapingService.scrapData(DataType.FreeClubs)).thenReturn(dataElements);
         doReturn(dataElements).when(scrapingService).scrapData(any());
-        //doNothing().when(messagingService).sendMessage(any());
 
-        String data = dataPullingService.pullData(DataType.FreeClubs);
         verify(scrapingService, times(1)).scrapData(any());
         assertEquals(dataElements.toString(), dataPullingService.pullData(DataType.FreeClubs));
     }

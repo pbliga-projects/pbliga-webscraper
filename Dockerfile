@@ -14,7 +14,7 @@ WORKDIR /application
 EXPOSE 5005
 CMD ["gradle", "bootRun", "-Pdebug"]
 
-FROM openjdk:8-alpine as production
+FROM gradle:6.8.3-jdk8 as production
 
 RUN mkdir -p /application/datastorage
 ARG JAR_FILE=/application/build/libs/pbliga-webscraper.jar
