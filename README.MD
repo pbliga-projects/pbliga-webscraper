@@ -5,4 +5,4 @@ Docker run:
 
 Docker Compose Rebuild and start all:
   * `docker-compose up --detach --build`
-  * Test 2
+  * Test 3
